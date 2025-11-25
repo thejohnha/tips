@@ -31,33 +31,33 @@ The only downside I can think of for this setup versus the projects above is tha
 # Install
 
 ## 1. Set up the folder structure
-```
+```bash
 mkdir -p $HOME/email-archive/dovecot
 mkdir -p $HOME/email-archive/mail
 mkdir -p $HOME/email-archive/mbsync
 mkdir -p $HOME/email-archive/roundcube_build
 ```
 ### Create user folders and set permissions
-```
+```bash
 mkdir -p $HOME/email-archive/mail/username1
 mkdir -p $HOME/email-archive/mail/username2
 chown -R 1000:1000 $HOME/email-archive/mail/username1
 chown -R 1000:1000 $HOME/email-archive/mail/username2
 ```
 ### Set permissions (we are using a virtual user 1000 here)
-```
+```bash
 chown -R 1000:1000 $HOME/email-archive/mail
 chown -R 1000:1000 $HOME/email-archive/mbsync
 cd $HOME/email-archive
 ```
 ### Save roundcube settings to persistent location
-```
+```bash
 mkdir -p $HOME/email-archive/roundcube/db
 chown -R 33:33 $HOME/email-archive/roundcube/db   # Make it owned by UID 33 (www-data) which is the user roundcube runs as
 ```
 
 ## 2. Define `mbsync` in a Dockerfile
-```
+```bash
  cat > $HOME/email-archive/mbsync/Dockerfile <<'EOT'
 FROM alpine:latest
 # Install isync (which contains the mbsync executable) and CA certificates for SSL
@@ -73,7 +73,7 @@ EOT
 
 ## 3. OPTIONAL: Define `roundcube` that extends session lifetime from 10 min to 1 year
 p.s. If you don't want this, then change the docker-compose file to comment out the `build:` line and uncomment the `image:` line.
-```
+```bash
  cat > $HOME/email-archive/roundcube_build/Dockerfile <<'EOT'
 FROM roundcube/roundcubemail:latest
 
@@ -85,7 +85,7 @@ EOT
 
 # 4. Create `dovecot.conf`
 ## This config tells Dovecot to look for emails in the `Maildir` format in `/srv/mail`
-```
+```bash
  cat > dovecot/dovecot.conf <<'EOT'
 #dovecot_config_version = 2.4.2   # Only works for versions >2.4.x (does not work for 2.3.x). Leaving here in case of later upgrade of dovecot to 2.4.x
 listen = *
@@ -124,7 +124,7 @@ This is the login you will use in Roundcube or your whatever desktop email GUI c
 If you remove them from this file, you will lose the ability to log in and view emails, even though the files are still on the disk. You must add new users to this file, not replace them.
 ### CRITICAL Concept
 As you add more accounts later (Bob, Alice), simply append them to this list. Do not remove a user when you are done syncing that account.
-```
+```bash
  cat > $HOME/email-archive/dovecot/users <<'EOT'
 username1:{PLAIN}redactedlocalpassword
 username2:{PLAIN}redactedlocalpassword
@@ -135,7 +135,7 @@ EOT
 ### If you simply sync * (everything), at least for gmail, you will download every email at least twice (once in its specific folder, and once in All Mail), doubling your storage requirement and cluttering your search results.
 ### For a usable archive that looks like your old inbox, you should sync everything except Sent Mail (included in All Mail) and Important (which is Google's algorithmic noise).
 ### You can delete account blocks after you are done syncing, if you don't need to sync them anymore (e.g., after you delete those accounts from your cloud provider).
-```
+```yaml
  cat > $HOME/email-archive/mbsync/.mbsyncrc <<'EOT'
 # Group 1 (example of a long-term sync account): For username1@gmail.com
 # Group 2 (example of one-time sync, then delete from cloud account): For username2@yourdomain.com
@@ -255,7 +255,7 @@ chmod 644 $HOME/email-archive/mbsync/.mbsyncrc
 ```
 
 # 7. Define the `docker-compose.yml` file
-```
+```yaml
  cat > $HOME/email-archive/docker-compose.yml <<'EOT'
 services:
   # 1. The Fetcher (mbsync)
@@ -308,7 +308,7 @@ EOT
 # Check if app password works
 
 ## Use `mbsync` to ask server for list of all folders
-```
+```bash
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l long-term-username1-gmail
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l one-time-username2
 ```
@@ -318,7 +318,7 @@ docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l one-time
 ## Build & Start Infrastructure
 (make sure you're in the `email-achiver` folder:
 `cd $HOME/email-archiver`
-```
+```bash
 docker compose build fetcher
 docker compose up -d
 ```
@@ -326,14 +326,14 @@ docker compose up -d
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc one-time-username2
 ## Wait for this to finish. Log into Roundcube with user username2 / redactedlocalpass to verify everything is there.
 ## If this is taking too long and you want to kill the process:
-```
+```bash
 docker ps
 docker kill <CONTAINER_ID>
 ```
 Example: `docker kill 7d0faaa765ac`
 
 ## Repeat for the "Long-Term" Sync (username1)
-```
+```bash
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l long-term-username1-gmail   # Optional Dry Run `-l switch`
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc long-term-username1-gmail      # Real Download
 ```
@@ -346,7 +346,7 @@ docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc long-term-u
 
 ## CHECK the Google Admin web console for size of gmail usage. Check against the size on disk and number of emails downloaded locally.
 ## This creates a temporary container, installs openssl, and drops you into a shell
-```
+```bash
 docker compose run --rm -u root --entrypoint /bin/sh fetcher
 apk add openssl
 ## Connect to gmail
@@ -399,7 +399,7 @@ Let's say an employee parts ways and you want to stop paying for their Google Wo
 # Backup
 ## Backup each account into a separate .tar.gz file
 (along with all associated infrastructure files)
-```
+```bash
 cd $HOME/email-archive
 docker compose stop
 tar -czvf      username1-gmail-backup-$(date +%F).tar.gz docker-compose.yml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username1/
@@ -410,7 +410,7 @@ docker compose up -d
 
 # Restore
 Copy the `.tar.gz` file to your new linux docker host.
-```
+```bash
 mkdir -p email-archive
 tar -xzvf username2-yourdomain-backup*.tar.gz -C email-archive/
 cd email-archive
