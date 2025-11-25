@@ -31,22 +31,30 @@ The only downside I can think of for this setup versus the projects above is tha
 # Install
 
 ## 1. Set up the folder structure
+```
 mkdir -p $HOME/email-archive/dovecot
 mkdir -p $HOME/email-archive/mail
 mkdir -p $HOME/email-archive/mbsync
 mkdir -p $HOME/email-archive/roundcube_build
+```
 ### Create user folders and set permissions
+```
 mkdir -p $HOME/email-archive/mail/username1
 mkdir -p $HOME/email-archive/mail/username2
 chown -R 1000:1000 $HOME/email-archive/mail/username1
 chown -R 1000:1000 $HOME/email-archive/mail/username2
+```
 ### Set permissions (we are using a virtual user 1000 here)
+```
 chown -R 1000:1000 $HOME/email-archive/mail
 chown -R 1000:1000 $HOME/email-archive/mbsync
 cd $HOME/email-archive
+```
 ### Save roundcube settings to persistent location
+```
 mkdir -p $HOME/email-archive/roundcube/db
 chown -R 33:33 $HOME/email-archive/roundcube/db   # Make it owned by UID 33 (www-data) which is the user roundcube runs as
+```
 
 ## 2. Define `mbsync` in a Dockerfile
 ```
@@ -300,8 +308,10 @@ EOT
 # Check if app password works
 
 ## Use `mbsync` to ask server for list of all folders
+```
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l long-term-username1-gmail
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l one-time-username2
+```
 
 
 # Sync!! This copies email to your local system (Execution Commands - Runbook)
@@ -317,17 +327,20 @@ docker kill <CONTAINER_ID>
 Example: `docker kill 7d0faaa765ac`
 
 ## Repeat for the "Long-Term" Sync (username1)
+```
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l long-term-username1-gmail   # Optional Dry Run `-l switch`
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc long-term-username1-gmail      # Real Download
+```
 
 
 # Check Everything to see if it worked!
 
 ## VERIFY: Check size of mailboxes on disk
-du -sh $HOME/email-archive/mail/*
+`du -sh $HOME/email-archive/mail/*`
 
 ## CHECK the Google Admin web console for size of gmail usage. Check against the size on disk and number of emails downloaded locally.
 ## This creates a temporary container, installs openssl, and drops you into a shell
+```
 docker compose run --rm -u root --entrypoint /bin/sh fetcher
 apk add openssl
 ## Connect to gmail
@@ -336,6 +349,7 @@ a login username@yourdomain.com redacted_app_password
 b STATUS "INBOX" (MESSAGES)
 c STATUS "[Gmail]/All Mail" (MESSAGES)
 d logout
+```
 
 ## Check by logging into Roundcube to verify everything is there.
 Go to: http://your.docker.host.ip:8000
@@ -361,7 +375,7 @@ This prevents mbsync from trying to connect to a deleted account in the future.
 # For Long-Run Sync Accounts: You can set up a simple cronjob on your host machine to trigger the sync daily.
 Adapt the folder path below to wherever you set up your `email-archive` folder.
 ## Add to crontab (This runs every day at 2:00 AM)
-0 2 * * * cd /path/to/email-archive && docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc long-term-username2-gmail
+`0 2 * * * cd /path/to/email-archive && docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc long-term-username2-gmail`
 ## If you want to sync all the blocks in `.mbsyncrc` then use `-a` above instead of `-c /home/app/config/.mbsyncrc long-term-username2-gmail`
 
 
@@ -372,19 +386,23 @@ Let's say an employee parts ways and you want to stop paying for their Google Wo
 # Backup
 ## Backup each account into a separate .tar.gz file
 (along with all associated infrastructure files)
-`cd $HOME/email-archive`
-`docker compose stop`
-`tar -czvf      username1-gmail-backup-$(date +%F).tar.gz docker-compose.yml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username1/`
-`tar -czvf username2-yourdomain-backup-$(date +%F).tar.gz docker-compose.yml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username2/`
-`docker compose up -d`
+```
+cd $HOME/email-archive
+docker compose stop
+tar -czvf      username1-gmail-backup-$(date +%F).tar.gz docker-compose.yml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username1/
+tar -czvf username2-yourdomain-backup-$(date +%F).tar.gz docker-compose.yml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username2/
+docker compose up -d
+```
 ## Safely move the `.tar.gz` archives somewhere for long-term storage
 
 # Restore
 Copy the `.tar.gz` file to your new linux docker host.
-`mkdir -p email-archive`
-`tar -xzvf username2-yourdomain-backup*.tar.gz -C email-archive/`
-`cd email-archive`
-`docker compose up -d`
+```
+mkdir -p email-archive
+tar -xzvf username2-yourdomain-backup*.tar.gz -C email-archive/
+cd email-archive
+docker compose up -d
+```
 Open roundcube http://<whatever-new-ip>:8000
 User: username2
 Pass: redactedlocalpassword
