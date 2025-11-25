@@ -254,7 +254,7 @@ chown 1000:1000 $HOME/email-archive/mbsync/.mbsyncrc
 chmod 644 $HOME/email-archive/mbsync/.mbsyncrc
 ```
 
-# x. Define the `docker-compose.yml` file
+# 7. Define the `docker-compose.yml` file
 ```
  cat > $HOME/email-archive/docker-compose.yml <<'EOT'
 services:
