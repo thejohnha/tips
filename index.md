@@ -427,6 +427,7 @@ Pass: redactedlocalpassword
 
 
 # Possible Future Enhancements:
+- add copy code buttons to code blocks above - how does one do this in Github Pages?
 - consider `imapsync` instead of `mbsync`
 - upgrade `dovecot` to v2.4.x
 - replace cron job with systemd timer
