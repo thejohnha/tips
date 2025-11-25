@@ -316,7 +316,7 @@ docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l one-time
 
 # Sync!! This copies email to your local system (Execution Commands - Runbook)
 ## Build & Start Infrastructure
-(make sure you're in the `email-achiver` folder:
+Make sure you're in the `email-achiver` folder:
 `cd $HOME/email-archiver`
 ```bash
 docker compose build fetcher
