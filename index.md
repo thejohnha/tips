@@ -359,10 +359,13 @@ d logout
 
 ## Check by logging into Roundcube to verify everything is there.
 Go to: http://your.docker.host.ip:8000
+
 User: username1
+
 Pass: redactedlocalpassword
 ## Turn on folders:
 Roundcube > Settings > Folders > flip on all the gmail folders
+
 Roundcube > Settings > Preferences > Displaying Messages > Allow remote resources (images, styles) > always > Save
 
 
@@ -372,13 +375,14 @@ Check all the above. Once satisfied, you can delete the Google Workspace or othe
 Honestly I would wait a month or three to see if this is a stable solution for you. Try the backup and restore procedures (below) and make sure you're comfortable with everything. And only then delete the cloud account.
 
 ## Clean Up Local Account (After deleting the cloud account)
-Once you are happy that your account(s) are safely in dovecot and you have deleted the Google Workspace or other cloud account:
+Once you are happy that your account(s) are safely in `dovecot` and you have deleted the Google Workspace or other cloud account:
 `nano $HOME/email-archive/mbsync/.mbsyncrc`
-### Delete the entire "Account 1" or whatever section from `.mbsyncrc`.
+### and delete the entire "Account 1" or whatever section from `.mbsyncrc`.
 This prevents mbsync from trying to connect to a deleted account in the future.
 
 
 # For Long-Run Sync Accounts:
+
 You can set up a simple cronjob on your host machine to trigger the sync daily.
 
 Adapt the folder path below to wherever you set up your `email-archive` folder.
