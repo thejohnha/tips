@@ -4,6 +4,24 @@
   <title>{{ page.title }}</title>
   
   <style>
+    /* Default Light Mode Styles */
+    body {
+      background-color: white;
+      color: #333;
+    }
+    
+    /* Automatic Dark Mode Styles */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #1e1e1e;
+        color: #eee;
+      }
+      /* Optional: Make links lighter in dark mode so they are readable */
+      a {
+        color: #809fff;
+      }
+    }
+
     /* Make the code block container relative so we can position the button */
     pre {
       position: relative;
