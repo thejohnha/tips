@@ -1,10 +1,10 @@
-# Archive emails from Google Workspace or other cloud accounts.
+# Locally archive emails from Google Workspace or other cloud accounts.
 
 ## Benefits:
-Protect against risk of loss of those accounts, or if you want to preserve the data but stop paying monthly for them.
+If you want to save emails locally and stop paying for those accounts. Or protect against risk of loss of those accounts.
 
 ## Use Cases
-Say an employee leaves and you want to stop paying monthly for their cloud account, but need to preserve the emails for compliance.
+Say an employee leaves and you want to stop paying monthly for their cloud account, but need to preserve the emails.
 
 Or, what happens if the vendor (Google or Microsoft) decides they don't want you to use their system anymore? You would lose all your emails - what a disaster that would be.
 
