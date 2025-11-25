@@ -9,10 +9,10 @@ Say an employee leaves and you want to stop paying monthly for their cloud accou
 Or, what happens if the vendor (Google or Microsoft) decides they don't want you to use their system anymore? You would lose all your emails - what a disaster that would be.
 
 ## Alternatives
-I found a couple apps that address these use cases and archive your emails accounts. I found and tried <a href='https://github.com/s1t5/mail-archiver'>https://github.com/s1t5/mail-archiver</a> and <a href='https://github.com/LogicLabs-OU/OpenArchiver'>https://github.com/LogicLabs-OU/OpenArchiver</a>, and Wayne Sheng (of the latter project) even wrote a nice blog post talking about his motivation for creating OpenArchiver: <a href='https://www.indiehackers.com/post/open-archiver-open-source-email-archiving-tool-with-full-text-search-1df19e095e'>https://www.indiehackers.com/post/open-archiver-open-source-email-archiving-tool-with-full-text-search-1df19e095e</a>
+I found a couple apps that address these use cases and archive your emails accounts. I found and tried <a href='https://github.com/s1t5/mail-archiver' target='_blank'>https://github.com/s1t5/mail-archiver</a> and <a href='https://github.com/LogicLabs-OU/OpenArchiver' target='_blank'>https://github.com/LogicLabs-OU/OpenArchiver</a>, and <a href='https://github.com/wayneshn' target='_blank'>Wayne Sheng</a> (of the latter project) even wrote a nice blog post talking about his motivation for creating OpenArchiver: <a href='https://www.indiehackers.com/post/open-archiver-open-source-email-archiving-tool-with-full-text-search-1df19e095e' target='_blank'>https://www.indiehackers.com/post/open-archiver-open-source-email-archiving-tool-with-full-text-search-1df19e095e</a>
 
-## Risks of using a complicated solution
-But what happens if Wayne or @s1t5 and company decide to stop maintaining either of these two projects? Well, you'd be in the same vendor lock-in situation that is partly the goal of these projects to avoid (not getting locked into Google Workspace or Microsoft 365 or whatever). Sure, they are open source projects and you can maintain it yourself, but that's not so accessible if you're not a software engineer or don't want to fathom the whole project to maintain it for yourself.
+## Risks of using a more complicated solution
+But what happens if Wayne or <a href='https://github.com/s1t5' target='_blank'>@s1t5</a> and company decide to stop maintaining either of these two projects? Well, you'd be in the same vendor lock-in situation that is partly the goal of these projects to avoid (not getting locked into Google Workspace or Microsoft 365 or whatever). Sure, they are open source projects and you can maintain it yourself, but that's not so accessible if you're not a software engineer or don't want to fathom the whole project to maintain it for yourself.
 
 I tried both projects and they work, but the user interfaces were a bit clunky in that I wanted to access the accounts like webmail, not like an archiving tool. Also, OpenArchiver was very resource heavy. My docker host was groaning under the weight - it wanted a lot of CPU and RAM and it appeared to be a fairly complex app with multiple orchestrated containers.
 
@@ -393,7 +393,7 @@ use `-a` above instead of `-c /home/app/config/.mbsyncrc long-term-username2-gma
 
 
 # Process the "next" account
-Let's say an employee parts ways and you want to stop paying for their Google Workspace account, just edit the above files, search for all instances of say `username2` and update to the next account you want to process.
+Let's say an employee parts ways and you want to stop paying for their Google Workspace account, just edit the above files, search for all instances of `username2` and update to the next account you want to process.
 
 
 # Backup
