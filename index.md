@@ -378,11 +378,14 @@ Once you are happy that your account(s) are safely in dovecot and you have delet
 This prevents mbsync from trying to connect to a deleted account in the future.
 
 
-# For Long-Run Sync Accounts: You can set up a simple cronjob on your host machine to trigger the sync daily.
+# For Long-Run Sync Accounts:
+You can set up a simple cronjob on your host machine to trigger the sync daily.
+
 Adapt the folder path below to wherever you set up your `email-archive` folder.
 ## Add to crontab (This runs every day at 2:00 AM)
 `0 2 * * * cd /path/to/email-archive && docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc long-term-username2-gmail`
-## If you want to sync all the blocks in `.mbsyncrc` then use `-a` above instead of `-c /home/app/config/.mbsyncrc long-term-username2-gmail`
+## If you want to sync all the blocks in `.mbsyncrc` then
+use `-a` above instead of `-c /home/app/config/.mbsyncrc long-term-username2-gmail`
 
 
 # Process the "next" account
