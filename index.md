@@ -433,3 +433,76 @@ Pass: redactedlocalpassword
 - replace cron job with systemd timer
 - create script to ask user for username, app password, sync options, and create the config files automatically
 - stripped down variant without roundcube, if you want to just use a desktop email client
+
+
+<style>
+  /* 1. COPY BUTTON STYLES */
+  pre { position: relative; } /* Container for the button */
+  .copy-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .copy-button:hover { opacity: 1; }
+
+  /* 2. AUTOMATIC DARK MODE (Minimal Change) 
+     This only activates if the user's device is in Dark Mode */
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #0d1117 !important; /* GitHub Dark Dimmed bg */
+      color: #c9d1d9 !important;            /* Soft white text */
+    }
+    /* Fix links */
+    a { color: #58a6ff !important; }
+    /* Fix code blocks */
+    pre, code {
+      background-color: #161b22 !important;
+      border: 1px solid #30363d !important;
+      color: #e6edf3 !important;
+    }
+    /* Adjust copy button for dark mode */
+    .copy-button {
+      background: #333;
+      border-color: #555;
+      color: #fff;
+    }
+  }
+</style>
+
+<script>
+  // 3. JAVASCRIPT FOR COPY functionality
+  // Wait for the page to load
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('pre').forEach(function(block) {
+      // Create the button
+      var button = document.createElement('button');
+      button.className = 'copy-button';
+      button.innerText = 'Copy';
+
+      // Add click event
+      button.addEventListener('click', function() {
+        // Get code text
+        var code = block.querySelector('code');
+        var text = code ? code.innerText : block.innerText;
+        
+        // Copy API
+        navigator.clipboard.writeText(text).then(function() {
+          button.innerText = 'Copied!';
+          setTimeout(function() { button.innerText = 'Copy'; }, 2000);
+        });
+      });
+
+      // Append button to the code block
+      block.appendChild(button);
+    });
+  });
+</script>
