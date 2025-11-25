@@ -315,15 +315,21 @@ docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc -l one-time
 
 
 # Sync!! This copies email to your local system (Execution Commands - Runbook)
-## Build & Start Infrastructure (make sure you're in the `email-achiver` folder: `cd $HOME/email-archiver`
+## Build & Start Infrastructure
+(make sure you're in the `email-achiver` folder:
+`cd $HOME/email-archiver`
+```
 docker compose build fetcher
 docker compose up -d
+```
 ## Run the "One-Time" Archive (username2) This runs the sync only for the one-time group defined in the config.
 docker compose run --rm fetcher mbsync -c /home/app/config/.mbsyncrc one-time-username2
 ## Wait for this to finish. Log into Roundcube with user username2 / redactedlocalpass to verify everything is there.
 ## If this is taking too long and you want to kill the process:
+```
 docker ps
 docker kill <CONTAINER_ID>
+```
 Example: `docker kill 7d0faaa765ac`
 
 ## Repeat for the "Long-Term" Sync (username1)
