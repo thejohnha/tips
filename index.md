@@ -25,7 +25,7 @@ I wanted a stripped down, fast, and durable setup. Enter dovecot. Widely used an
 3. Use `roundcube` to provide a gui to access the accounts.
 
 ## Downside
-The only downside I can think of for this setup versus the projects above is that if you want webmail client only you need to log in separately to each account, instead of being able to search and query across all of your archived emails. I suppose you could set up multiple docker instances of `roundcube` and log into those separately. But you could also just set up a desktop client like Thunderbird and add all your accounts there. p.s. I changed the session lifetime for roundcube from the default 10 minutes to 1 year so I don't get logged out. If you don't want that feature or want to change it to a different timeout level, you can do so easily in the docker-compose.yml file.
+The only downside I can think of for this setup versus the projects above is that if you want webmail client only you need to log in separately to each account, instead of being able to search and query across all of your archived emails. I suppose you could set up multiple docker instances of `roundcube` and log into those separately. But you could also just set up a desktop client like Thunderbird and add all your accounts there. p.s. I changed the session lifetime for roundcube from the default 10 minutes to 1 year so I don't get logged out. If you don't want that feature or want to change it to a different timeout level, you can do so easily in the `compose.yaml` file.
 
 
 # Install
@@ -254,9 +254,9 @@ chown 1000:1000 $HOME/email-archive/mbsync/.mbsyncrc
 chmod 644 $HOME/email-archive/mbsync/.mbsyncrc
 ```
 
-# 7. Define the `docker-compose.yml` file
+# 7. Define the `compose.yaml` file
 ```yaml
- cat > $HOME/email-archive/docker-compose.yml <<'EOT'
+ cat > $HOME/email-archive/compose.yaml <<'EOT'
 services:
   # 1. The Fetcher (mbsync)
   fetcher:
@@ -402,8 +402,8 @@ Let's say an employee parts ways and you want to stop paying for their Google Wo
 ```bash
 cd $HOME/email-archive
 docker compose stop
-tar -czvf      username1-gmail-backup-$(date +%F).tar.gz docker-compose.yml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username1/
-tar -czvf username2-yourdomain-backup-$(date +%F).tar.gz docker-compose.yml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username2/
+tar -czvf      username1-gmail-backup-$(date +%F).tar.gz compose.yaml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username1/
+tar -czvf username2-yourdomain-backup-$(date +%F).tar.gz compose.yaml mbsync/ dovecot/ roundcube/ roundcube_build/ mail/username2/
 docker compose up -d
 ```
 ## Safely move the `.tar.gz` archives somewhere for long-term storage
